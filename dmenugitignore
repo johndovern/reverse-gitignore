@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if pwd | grep -x "$HOME" >/dev/null 2>&1; then dir=$(find $HOME -type d -printf '%P\n' | dmenu -i -p "test?"); fi
+if [[ -n ${dir+x} ]]; then cd $dir; fi
+g="$(pwd)/.gitignore"
+og="$(pwd)/.gitignore-old"
+tmp="$(pwd)/.$(echo $RANDOM | md5sum | head -c 20)"
+if [[ ! -e "$g" ]]; then echo "###" > "$g"; fi
+for t in .* *; do
+  case $t in
+    \*|.|..) continue;;
+    *) echo "!$t" >> "$tmp";;
+  esac
+done
+if [[ -e "$og" ]]; then mv "$og" "$(pwd)/.gitignore-very-old"; fi
+mv "$g" "$og"
+echo -e "### Updated on $(date) ###" > "$g"
+while read -r t; do t1=${t:1}; in=$(echo "#$t1"); b=0; l=0
+  while read -r o; do i=${o:1}; k=$(wc -l < "$og"); l=$((l+1))
+    if [[ "$o" == "*" ]]; then continue; fi
+    if [[ "$t1" == "$i" ]]; then echo "$o" >> "$g"; l=$((l-1)); continue; fi
+    if [[ "$l" == "$k" ]]; then nn=1; case "$(printf "Track\\nIgnore" | dmenu -i -p "New item -- $t1 ")" in
+      "Track") echo "$t" >> "$g"; continue ;;
+      "Ignore") echo "$in" >> "$g"; continue ;;
+      *) continue;;
+    esac; fi
+  done < "$og"
+done < "$tmp"
+while read -r o; do i=${o:1}; l=0; h=${o:0:3};
+  if [[ "$o" == "*" ]]; then sed -i "1 a $o" "$g"; continue; fi
+  while read -r t; do t1=${t:1}
+    if [[ "$t1" == "$i" ]]; then l=$((l+1)) continue; fi
+  done < "$tmp"
+  if [[ "$l" == "0" && "$h" != "###" ]]; then sed -i "1 a ### < $o > deleted since last update ###" "$g"; fi
+done < "$og"
+while read -r i; do
+  if [[ "$i" == "*" ]]; then s=1; break; fi
+done < "$g"
+rmog=$(<"$og")
+if [[ "$rmog" == "###" ]]; then rm "$og"; fi
+if [[ -z ${s+x} ]]; then sed -i "1 a *" "$g"; fi
+if [[ -z ${nn+x} ]]; then rm "$og"; fi
+rm -rf "$tmp"
+if [[ -n ${dir+x} ]]; then notify-send "gitignore file in $dir updated"; fi
+exit
