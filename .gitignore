@@ -1,0 +1,7 @@
+### Updated on Sun Dec 12 01:25:39 AM PST 2021 ###
+*
+#.git
+!.gitignore
+!dmenugitignore
+!README.md
+!tracked-dir

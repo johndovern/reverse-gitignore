@@ -1,6 +1,7 @@
 #!/bin/sh
 
-if pwd | grep -x "$HOME" >/dev/null 2>&1; then dir=$(find $HOME -type d -printf '%P\n' | dmenu -i -p "test?"); fi
+if pwd | grep -x "$HOME" >/dev/null 2>&1; then dir=$(find $HOME -type d -printf '%P\n' | dmenu -i -p "Which directory do you want to track? "); fi
+if [[ -z ${dir} ]]; then notify-send "no directory set, exiting"; exit 1 ; fi
 if [[ -n ${dir+x} ]]; then cd $dir; fi
 g="$(pwd)/.gitignore"
 og="$(pwd)/.gitignore-old"

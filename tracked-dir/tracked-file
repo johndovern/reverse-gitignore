@@ -1,0 +1,7 @@
+this file is being tracked because the following two conditions are met
+1. the current directory is being tracked as can be seen in .gitignore file of the
+   parent directory
+2. the .gitignore file in the current directory tells git to not ignore this
+   file
+these two conditions must absolutely be met or a file cannot be tracked without
+the use of the -f flag.
