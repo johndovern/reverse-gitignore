@@ -1,0 +1,19 @@
+this file cannot be tracked (at least not without the use of the -f falg)
+despite the .gitignore file in the current directory, not-explicitly-tracked/,
+including it to be tracked. the .gitignore file in the parent directory,
+tracked-dir/, does not list the current directory as being tracked. because of
+that no files in the current directory, are trackable without the use of the -f
+flag. notice that in the .gitignore file of the parent directory there is no
+"*" character. this does not matter as the root directory of this repo
+containes a .gitignore file with that character. the asterisk in a .gitignore
+file tells git to ignore every file in the current directory and in all
+subdirectories. as it is found in the .gitignore file of the root directory
+everything to be tracked must be explicitly listed in a .gitignore file. either
+as an absolute path or one relative to the current directory. i prefer to have
+many .gitignore files in all the directories i am actively tracking. this lets
+me see quickly what files and directories are being tracked in a readable
+manner. using a single .gitignore file in the root directory with absolute
+paths to the files i want to track is unreadable. this may all seem cumbersome
+but i truly think this provides a nice layer of security from my greatest
+enemy, myself who likes to do stupid things like run [ $ git add . ] in my home
+directory. with this i can do that safely.

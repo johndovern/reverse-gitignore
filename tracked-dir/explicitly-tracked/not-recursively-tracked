@@ -1,0 +1,4 @@
+despite the directory explicitly-tracked/ being tracked, this file is still not
+tracked as tracking does not work recursively. to track this file it must be
+listed in the .gitignore file of the current directory, prefaced with an
+exclamation point (!).
