@@ -1,7 +1,7 @@
 # reverse-gitignore
 what does that even mean? pretty much what you might imagine. traditionally a
-gitignore file is used to, well ignore files. this script assists with doing
-the opposite of that.
+[gitignore](https://git-scm.com/docs/gitignore) file is used to, well ignore
+files. this script assists with doing the opposite of that.
 ## made to be used with a bare git repo
 if you manage your dotfiles via a bare git repo, the best way to manage
 dotfiles, then you've potentially got a ton of files that may end up on github
