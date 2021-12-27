@@ -45,13 +45,13 @@ consuming. **every single file you care about has to be entered into a**
 **`.gitignore` file prefixed with an exclamation point.** to make that
 proccess easier i've made this script, dmenugitignore. here is how it works.
 ### running for the first time
-if you do not have a .gitignore file in the directory where you are running
-this script then one will be created for you. you will then be prompted, via
-dmenu, to either track, or ignore each file and subdirectory found in the
-current directory where the script was run. this does not work recursively.
-only files that would show up with `ls -Al` will be options to either track or
-ignore. once you've chosen what to do with each file you'll end up with a
-.gitignore file that looks like this
+if you do not have a .gitignore file in the working directory where you are
+running this script then one will be created for you. you will then be
+prompted, via dmenu, to either track, or ignore each file and subdirectory
+found in the working directory where the script was run. this does not work
+recursively. only files that would show up with `ls -Al` will be options to
+either track or ignore. once you've chosen what to do with each file you'll end
+up with a .gitignore file that looks like this
 ```bash
 ### Updated on Thu Dec  9 09:42:20 PM PST 2021 ###
 *
@@ -63,8 +63,8 @@ ignore. once you've chosen what to do with each file you'll end up with a
 **the hashes in front of files and directories does nothing, this is simply to
 show, at a glance, which files are being ignored.** rinse and repeat for every
 other directory where you want to track some files, again folders are not
-tracked recursively, but you need to track them to be able to track what is
-inside.
+tracked recursively, *but you need to track them to be able to track what is
+inside.*
 ### running in a directory that already contains a .gitignore file
 only .gitignore files that are being used in a reverse manner will work. **if
 your .gitignore file is a traditional one please rename it and see above for
@@ -80,8 +80,9 @@ you've run this script three times in the same directory. that's basically it,
 a simple while loop and some if and case statements and this process becomes a
 lot easier.
 ### tested and recommended ways to run this script
-**this script is not meant to be run in your home directory.** the `.gitignore`
-file in your home directory should be pretty small. something like this
+**this script is not meant to be run in your home directory if you are using
+this for your dotfiles.** the `.gitignore` file in your home directory should
+be pretty small. something like this
 ```bash
 *
 !.config
@@ -120,12 +121,58 @@ dmenugitignore
 ```
 not much else to say. use `ls -Al` to get a preivew of what files you'll have
 the option of tracking.
+## dmenugitignore-auto
+dmenugitignore-auto makes maintaining your reversed `.gitignore` files that
+much easier by finding all the `.gitignore` files in the given repo and running
+dmenugitignore in those directories to update all of your folders at once.
+instead of going and manually searching for and updating each `.gitignore` file
+this script finds those files and updates them for you.
+### not just for one repo
+if you use a reverse `.gitignore` system for multiple repos then you will
+appreciate the fact that this script will find those files for a given repo.
+#### how it finds the files
+if you run
+```bash
+/usr/bin/git --git-dir=$HOME/.git --work-tree=$HOME ls-tree -r master --name-only
+```
+every single file tracked by that repo will be printed onto your terminal. and
+if you are tracking your reversed `.gitignore` files **which you should be
+doing** then those will be printed here as well. if we pipe that output to grep
+and search for ".gitignore" then we will have all the directories that are
+being tracked. simply chop off the "/.gitignore" and you've got $HOME/foo/bar.
+the script then cd's into that directory and runs dmenugitignore there for you.
+by taking all those directories and feeding them through a while loop each and
+every `.gitignore` file that is being track will be automatically updated. if
+there are new files dmenugitignore will work as it normally does and ask you
+what you want to do with them. and that's really all there is to it. this takes
+much of the tedium out of updating these files and is especially helpful for
+maintaining something like your dotfiles. but it is not just for you dotfiles
+#### flags
+##### -d
+the -d flag wants the path to, effectively, a .git folder. above you can see
+`--git-dir=$HOME/.git` -d wants whatever you would put after the equal sign.
+**when using the -d flag it is neccessary to use the -t flag.** the
+##### -t
+-t flag is like -d but it want's the path to the working tree
+`--work-tree=$HOME` it is up to you to know the working tree that goes with the
+git dir. by default the git dir and working tree are set to $HOME/.cfg and $HOME
+respectively. that is because i use this primarily to maintain my dotfiles which
+i set up following [this](https://www.atlassian.com/git/tutorials/dotfiles) guide.
+if you have a different default configuration then please change lines 51 and 52
+to the proper paths for the repo you intend to use this with most frequently.
+##### -b
+-b is the branch for your repo that you want to update. if you have seprate
+branches for your dotfiles, say for multiple machines, or whatever, then make
+sure you are updating the proper branch. change line 53 if your most used
+branch is something other than maste *cringe*
 ## installation
 **the script has only been tested on linux but the principle can be applied to**
 **any git repo...just without the convenience this script offers**
 ```bash
 curl -O https://raw.githubusercontent.com/johndovern/reverse-gitignore/master/dmenugitignore
+curl -O https://raw.githubusercontent.com/johndovern/reverse-gitignore/master/dmenugitignore-auto
 chmod +x dmenugitignore
+chmod +x dmenugitignore-auto
 echo $PATH
 ```
 place somewhere in your $PATH and feel free to run it as described above.
@@ -145,11 +192,11 @@ parent directory of that file must also be explicitly tracked in the
 more likely, if i have failed to explain it properly, then please see the
 directories and files in this repo to get an idea of how this all works.
 reversing the way the .gitignore file works may seem strange, pointless, or as
-a way to simply make one waste their time. however, i think that this is really
-is a great way to add a layer of security to you dotfiles repo. accidently
-adding an ssh key or private picture does not sound fun to me. if you still
-have a hard time understanding how this all looks in action, checkout my
-dotfiles. each .gitignore file is tracked (this makes installing on new
+a way to simply make one waste their time. however, i think that this really is
+a great way to add a layer of security to you dotfiles repo. accidently adding
+an ssh key or private picture does not sound fun to me. if you still have a
+hard time understanding how this all looks in action, checkout my dotfiles.
+each .gitignore file is tracked (this makes installation and maintence on new
 machines a breeze) and should give you an idea of how this looks in action.
 there isn't a single file there that i did not explicity add through a
 .gitignore file. i run git add . whenever i've got a new file to track, no more
