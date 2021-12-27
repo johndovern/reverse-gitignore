@@ -151,9 +151,9 @@ maintaining something like your dotfiles. but it is not just for you dotfiles
 ##### -d
 the -d flag wants the path to, effectively, a .git folder. above you can see
 `--git-dir=$HOME/.git` -d wants whatever you would put after the equal sign.
-**when using the -d flag it is neccessary to use the -t flag.** the
+**when using the -d flag it is neccessary to use the -t flag.**
 ##### -t
--t flag is like -d but it want's the path to the working tree
+the -t flag is like -d but it want's the path to the working tree
 `--work-tree=$HOME` it is up to you to know the working tree that goes with the
 git dir. by default the git dir and working tree are set to $HOME/.cfg and $HOME
 respectively. that is because i use this primarily to maintain my dotfiles which
