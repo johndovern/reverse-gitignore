@@ -124,7 +124,7 @@ the option of tracking.
 ## dmenugitignore-auto
 dmenugitignore-auto makes maintaining your reversed `.gitignore` files that
 much easier by finding all the `.gitignore` files in the given repo and running
-dmenugitignore in those directories to update all of your folders at once.
+dmenugitignore in those directories to update all of those files at once.
 instead of going and manually searching for and updating each `.gitignore` file
 this script finds those files and updates them for you.
 ### not just for one repo
