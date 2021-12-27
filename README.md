@@ -164,7 +164,7 @@ to the proper paths for the repo you intend to use this with most frequently.
 -b is the branch for your repo that you want to update. if you have seprate
 branches for your dotfiles, say for multiple machines, or whatever, then make
 sure you are updating the proper branch. change line 53 if your most used
-branch is something other than master *cringe*
+branch is something other than master, *cringe*
 ## installation
 **the script has only been tested on linux but the principle can be applied to**
 **any git repo...just without the convenience this script offers**
