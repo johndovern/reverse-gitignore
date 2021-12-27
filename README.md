@@ -154,7 +154,7 @@ the -d flag wants the path to, effectively, a .git folder. above you can see
 **when using the -d flag it is neccessary to use the -t flag.**
 ##### -t
 the -t flag is like -d but it want's the path to the working tree
-`--work-tree=$HOME` it is up to you to know the working tree that goes with the
+`--work-tree=$HOME`. it is up to you to know the working tree that goes with the
 git dir. by default the git dir and working tree are set to $HOME/.cfg and $HOME
 respectively. that is because i use this primarily to maintain my dotfiles which
 i set up following [this](https://www.atlassian.com/git/tutorials/dotfiles) guide.
@@ -164,7 +164,7 @@ to the proper paths for the repo you intend to use this with most frequently.
 -b is the branch for your repo that you want to update. if you have seprate
 branches for your dotfiles, say for multiple machines, or whatever, then make
 sure you are updating the proper branch. change line 53 if your most used
-branch is something other than maste *cringe*
+branch is something other than master *cringe*
 ## installation
 **the script has only been tested on linux but the principle can be applied to**
 **any git repo...just without the convenience this script offers**
