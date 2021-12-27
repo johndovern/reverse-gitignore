@@ -1,6 +1,7 @@
 #!/bin/sh
 
-if pwd | grep -x "$HOME" >/dev/null 2>&1; then dir=$(find $HOME -type d -printf '%P\n' | dmenu -i -p "Which directory do you want to track? "); fi
+if [[ -n "${1+x}" ]]; then dir="${1%/*}" ;fi
+if pwd | grep -x "$HOME" >/dev/null 2>&1; then dir=$(find $HOME -type d -printf '%P\n' | dmenu -i -p "Which directory do you want to track? "); else dir=$(pwd); fi
 if [[ -z ${dir} ]]; then notify-send "no directory set, exiting"; exit 1 ; fi
 if [[ -n ${dir+x} ]]; then cd $dir; fi
 g="$(pwd)/.gitignore"
@@ -20,7 +21,7 @@ while read -r t; do t1=${t:1}; in=$(echo "#$t1"); b=0; l=0
   while read -r o; do i=${o:1}; k=$(wc -l < "$og"); l=$((l+1))
     if [[ "$o" == "*" ]]; then continue; fi
     if [[ "$t1" == "$i" ]]; then echo "$o" >> "$g"; l=$((l-1)); continue; fi
-    if [[ "$l" == "$k" ]]; then nn=1; case "$(printf "Track\\nIgnore" | dmenu -i -p "New item -- $t1 ")" in
+    if [[ "$l" == "$k" ]]; then nn=1; case "$(printf "Track\\nIgnore" | dmenu -i -p "New item -- $PWD/$t1 ")" in
       "Track") echo "$t" >> "$g"; continue ;;
       "Ignore") echo "$in" >> "$g"; continue ;;
       *) continue;;
