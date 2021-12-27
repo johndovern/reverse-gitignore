@@ -1,0 +1,67 @@
+#!/bin/sh
+
+usage() {
+  cat <<EOF
+Usage:  dmenugitignoreauto [options]
+
+Options:
+  -d, --dir           path to the git dir whose .gitignore files you want to update.
+                      must be a valid git dir. default is \$HOME/.cfg
+                      e.g.  --git-dir=\$HOME/.cfg
+                      NOTE the lack of trailing "/"
+  -t, --tree          working tree for the git repo, default is \$HOME
+                      e.g.  --work-tree=/path/to/working/tree
+                      NOTE the lack of trailing "/"
+  -b, --branch        update the files tracked in a certain branch.
+                      useful if you maintian mutliple branches on one system.
+                      default is master.
+
+  -h, --help          Show this help message and exit.
+
+Descrition:
+  dmenugitignoreauto finds all the .gitignore files in the given repo that
+  presently exist. the default use case is for dotfiles that are maintained as
+  a bare git repo. use options -d, -t, and -b as needed to update the proper
+  repo and branch
+EOF
+}
+
+OPTS=$(
+  getopt -n 'dgitauto' \
+	 -o d:t:hb: \
+	 --long dir:,tree:,help,branch:: -- "$@"
+)
+
+if [ $? != 0 ]; then
+  echo "Try 'dgitauto --help' for more information."
+  exit 1
+fi
+eval set -- "$OPTS"
+
+while : ; do
+  case "$1" in
+    -h | --help ) usage;                 exit 0;;
+    -d | --dir )  gitrepodir="${2%/}";     shift 2;;
+    -t | --tree ) gitrepotree="${2%/}";    shift 2;;
+    -b | --branch ) branch="$2";        shift 2;;
+    *) break;;
+  esac
+done
+
+if [ -z "$gitrepodir" ]; then gitrepodir="$HOME/.cfg/"; fi
+if [ -z "$gitrepotree" ]; then gitrepotree="$HOME"; fi
+if [ -z "$branch" ]; then branch="master"; fi
+
+autoupdater() { \
+  gitignorefiles=$(/usr/bin/git --git-dir="$gitrepodir" --work-tree="$gitrepotree" ls-tree -r "$branch" --name-only | grep ".gitignore")
+  while IFS= read -r dirswithgit; do
+    dirstoupdate="$gitrepotree/${dirswithgit%.gitignore}"
+    if [ -d "$dirstoupdate" ]; then
+      cd "$dirstoupdate" || exit
+      dmenugitignore
+    fi
+  done < <(printf '%s\n' "$gitignorefiles")
+}
+
+autoupdater
+exit

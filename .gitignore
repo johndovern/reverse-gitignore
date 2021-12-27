@@ -1,8 +1,11 @@
-### Updated on Sun Dec 12 03:37:05 AM PST 2021 ###
+### Updated on Sun Dec 26 10:37:05 PM PST 2021 ###
 *
 #.git
 !.gitignore
+#.gitignore-old
+#.gitignore-very-old
 !dmenugitignore
+!dmenugitignore-auto
 !LICENSE
 !README.md
 !tracked-dir
