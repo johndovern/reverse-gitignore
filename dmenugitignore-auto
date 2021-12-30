@@ -55,8 +55,8 @@ if [ -z "$branch" ]; then branch="master"; fi
 autoupdater() { \
   gitignorefiles=$(/usr/bin/git --git-dir="$gitrepodir" --work-tree="$gitrepotree" ls-tree -r "$branch" --name-only | grep ".gitignore")
   while IFS= read -r dirswithgit; do
-    dirstoupdate="$gitrepotree/${dirswithgit%.gitignore}"
-    if [ -d "$dirstoupdate" ]; then
+    dirstoupdate="$gitrepotree/${dirswithgit%/.gitignore}"
+    if [ -d "$dirstoupdate" ] && [ "$dirstoupdate" != "$HOME" ]; then
       cd "$dirstoupdate" || exit
       dmenugitignore
     fi
